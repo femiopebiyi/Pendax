@@ -11,7 +11,7 @@ export function Navbar(){
 
     return <div className="navbar">
         <div className="con">
-            <div className="logo-con"><img src={pendaxIcon} alt="pendaxIcon" className="pendaxIcon"/></div>
+            <img src={pendaxIcon} alt="pendaxIcon" className="pendaxIcon"/>
             <button className="connnect">Connect Wallet</button>
         </div>
 
