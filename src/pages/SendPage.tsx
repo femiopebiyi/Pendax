@@ -1,4 +1,4 @@
-import Footer from "../components/Footer";
+
 import { SendForm } from "../components/SendForm";
 import { WalletBalance } from "../components/WalletBalance";
 
