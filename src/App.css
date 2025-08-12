@@ -26,14 +26,24 @@ body{
   margin: 0 auto;
 }
 
-/* .pendaxIcon{
+.logo-con{
+  /* border: 1px solid green; */
+  height: 40px;
+  width: 40px;
+}
+
+.pendaxIcon{
   
-} */
+  
+  
+}
 
 .con{
   /* border: 1px solid green; */
   display: flex;
   gap: 10px;
+  align-items: center;
+
 }
 
 .con button{
@@ -310,6 +320,22 @@ padding: 0  1.4em;
 .footer h2{
   font-size: .9rem;
   color: #657795;
+  font-weight: 600;
+  font-style: semi-bold;
+  opacity: .6;
+  text-align: center;
+}
+
+.nav-btn{
+  /* border: 1px solid red; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-btn img{
+  height: 24px;
+  width: 24px;
 }
 
 .send-txt{
