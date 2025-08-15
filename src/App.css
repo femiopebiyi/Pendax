@@ -50,7 +50,7 @@ body{
 
 .navbar button{
   border-radius: 57.26px;
-  padding: 14px 28.18px;
+  padding: 10px 28.18px;
   background: #661ACF;
 background: linear-gradient(90deg, rgba(102, 26, 207, 1) 0%, rgba(41, 110, 250, 1) 100%);
 border: none;
@@ -84,9 +84,9 @@ font-size: 16px;
 .sendPage{
   /* border: 1px solid red; */
  
-  width: 97%;
+  width: 96%;
   margin: 0 auto;
-  margin-bottom: 10em;
+  margin-bottom: 8em;
    margin-top: 5em;
 }
 
@@ -129,7 +129,7 @@ padding: 0  1.4em;
   border: none;
   outline: none;
   border-radius: 56px;
-  padding: 1em 1.5em;
+  padding: .5em 1.5em;
   width: 126px;
   color: #661ACF;
   font-size: 1rem;
@@ -171,14 +171,24 @@ padding: 0  1.4em;
 .currency-section {
   display: flex;
   align-items: center;
-  gap: 6px;
-  height: 43px;
+  gap: 3px;
+  height: 40px;
   padding-right: 8px;
   border: 2px solid #d6e1f5; /* light divider */
   background-color: white;
   border-radius: 32px;
   padding: 0 1em;
 }
+
+.currency-section img{
+  /* border: 1px solid red; */
+}
+
+.arrowDown{
+  transform: translateY(-1.7px);
+}
+
+select#icon option[value="NGN"]   { background-image:url(./assets/icons/nairaIcon.svg);   }
 
 .currency-text {
   font-weight: 500;
@@ -212,6 +222,8 @@ padding: 0  1.4em;
   font-family: "Urbanist";
   font-weight: 500;
   font-style: medium;
+  font-size: 16px;
+  
 }
 
 .amount-input::-webkit-outer-spin-button,

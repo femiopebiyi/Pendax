@@ -1,8 +1,27 @@
 import pendaxIcon from  "../assets/icons/pendaxIcon.svg"
-// import pendaxLogo from "../assets/icons/pendaxLogo.png"
+import { verifyBankAccount } from "../functionalities/getBankDetails";
 
+// import pendaxLogo from "../assets/icons/pendaxLogo.png
+
+
+ 
 
 export function Navbar(){
+
+    
+    (async () => {
+  try {
+    const result = await verifyBankAccount("9066245634", "999992");
+    console.log(result.data.account_name);
+    console.log(result.data.account_number);
+    console.log(result.data.bank_id);
+  } catch (error) {
+    console.error("Verification failed:", error);
+  }
+})();
+   
+     
+
 
 
 
