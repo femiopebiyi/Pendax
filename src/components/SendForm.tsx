@@ -3,6 +3,8 @@ import nairaIcon from "../assets/icons/nigeriaFlag.svg";
 import ghanaIcon from "../assets/icons/ghanaFlag.svg";
 import southyIcon from "../assets/icons/southyFlag.svg";
 import arrowDown from "../assets/icons/arrowDown.svg";
+import AccountInput from "./AccountInput";
+import BankSelect from "./BankSelect";
 
 const currencies = [
   { code: "NGN", label: "NGN", icon: nairaIcon },
@@ -123,18 +125,14 @@ export function SendForm() {
 
       {/* Account Number */}
       <div className="accountNo">
-        <input placeholder="Enter Account Number" />
+        {/* <input placeholder="Enter Account Number" /> */}
+          <AccountInput/>
+        
       </div>
 
       {/* Bank Selection */}
       <div className="selBank bank-select-container">
-        <select className="bank-select">
-          <option value="">Select bank</option>
-          <option value="access">Access Bank</option>
-          <option value="gtbank">GTBank</option>
-          <option value="uba">UBA</option>
-          <option value="zenith">Zenith Bank</option>
-        </select>
+       <BankSelect/>
         <img src={arrowDown} alt="arrow" />
       </div>
 
