@@ -3,12 +3,14 @@ import { Navbar } from "./components/Navbar"
 import "./App.css"
 import { SendPage } from "./pages/SendPage"
 import Footer from "./components/Footer"
+import { WalletConnectProvider } from "./assets/context/WalletConnectContext"
 
 function App() {
 
 
   return (
     <div className='App'>
+      <WalletConnectProvider>
         <Router>
           <Navbar/>
           <Footer/>
@@ -16,6 +18,7 @@ function App() {
             <Route path="/" element = {<SendPage/>}/>
           </Routes>
         </Router>
+        </WalletConnectProvider>
     </div>
   )
 }

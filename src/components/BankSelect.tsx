@@ -1,6 +1,8 @@
-
-import  { useState } from "react";
+import { useState } from "react";
 import "../assets/styling/BankDetails.css";
+import arrowDown from "../assets/icons/arrowDown.svg"
+import gtIcon from "../assets/icons/gtIcon.svg"
+
 interface Bank {
   id: number;
   name: string;
@@ -17,30 +19,44 @@ const banks: Bank[] = [
 const BankSelect = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [search, setSearch] = useState("");
+  const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
 
   const filteredBanks = banks.filter((bank) =>
     bank.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div>
-      {/* Trigger button */}
-      <button onClick={() => setShowPopup(true)} className="open-btn">
-        Select Bank
-      </button>
+    <div className="bank-input-con">
+      {/* Input container with bank logo */}
+      <div className="bank-input-wrapper">
+        {selectedBank && (
+          <img
+            src={gtIcon}
+            alt="bank"
+            className="selected-bank-icon"
+          />
+        )}
+        <input
+          type="text"
+          placeholder="Select Bank"
+          value={selectedBank ? selectedBank.name : ""}
+          onClick={() => setShowPopup(true)}
+          readOnly
+          className="open-input"
+        />
+        <span className="arrow-bank"><img src={arrowDown} alt="" /></span>
+      </div>
 
-      {/* Fullscreen Popup */}
+      {/* Popup */}
       {showPopup && (
         <div className="popup-overlay">
-          {/* Header */}
           <div className="popup-header">
             <button className="close-btn" onClick={() => setShowPopup(false)}>
               ×
             </button>
-            <span>Select Bank</span>
+            <p className="popup-title">Select Bank</p>
           </div>
 
-          {/* Search input */}
           <div className="popup-input-container">
             <input
               type="text"
@@ -52,14 +68,13 @@ const BankSelect = () => {
             />
           </div>
 
-          {/* Bank list */}
           <div className="popup-list">
             {filteredBanks.map((bank) => (
               <div
                 key={bank.id}
                 className="bank-item"
                 onClick={() => {
-                  alert(`Selected: ${bank.name}`);
+                  setSelectedBank(bank); // store whole bank object
                   setShowPopup(false);
                 }}
               >

@@ -1,7 +1,9 @@
 import pendaxIcon from  "../assets/icons/pendaxIcon.svg"
 import { verifyBankAccount } from "../functionalities/getBankDetails";
-
+import { UIContext } from "../assets/context/WalletConnectContext";
+import { useContext } from "react";
 // import pendaxLogo from "../assets/icons/pendaxLogo.png
+import profile from "../assets/icons/Ellipse.png"
 
 
  
@@ -21,14 +23,14 @@ export function Navbar(){
 })();
    
      
+   const { walletConnected, connectWallet } = useContext(UIContext)
 
 
 
-
-    return <div className="navbar">
+    return <div className="navbar" >
         <div className="con">
-            <img src={pendaxIcon} alt="pendaxIcon" className="pendaxIcon"/>
-            <h2>Pendax</h2>
+            <img src={walletConnected ? profile : pendaxIcon} alt="pendaxIcon" className="pendaxIcon"/>
+            <h2 className={walletConnected ? "connected" : ""}>{!walletConnected ? "Pendax" : "Hi, 0xd2...f3d"}</h2>
         </div>
 
         {/* <div className="smallIcons">
@@ -37,6 +39,6 @@ export function Navbar(){
             <img src={bellIcon} alt="" />
         </div> */}
 
-        <button className="connnect">Connect Wallet</button>
+        <button className="connnect" onClick={connectWallet}>{!walletConnected ? "Connect Wallet" : "Connected"}</button>
     </div>
 }

@@ -1,10 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import nairaIcon from "../assets/icons/nigeriaFlag.svg";
 import ghanaIcon from "../assets/icons/ghanaFlag.svg";
 import southyIcon from "../assets/icons/southyFlag.svg";
 import arrowDown from "../assets/icons/arrowDown.svg";
 import AccountInput from "./AccountInput";
 import BankSelect from "./BankSelect";
+import TokenSelect from "./TokenSelect";
+import { UIContext } from "../assets/context/WalletConnectContext";
 
 const currencies = [
   { code: "NGN", label: "NGN", icon: nairaIcon },
@@ -38,6 +40,10 @@ export function SendForm() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  //connect wallet 
+
+  const {walletConnected, connectWallet} = useContext(UIContext)
 
   return (
     <div className="sendform">
@@ -133,24 +139,16 @@ export function SendForm() {
       {/* Bank Selection */}
       <div className="selBank bank-select-container">
        <BankSelect/>
-        <img src={arrowDown} alt="arrow" />
       </div>
 
       {/* Token Selection */}
       <div className="selToken">
-        <select className="select-token">
-          <option value="">Select token</option>
-          <option value="btc">Bitcoin (BTC)</option>
-          <option value="eth">Ethereum (ETH)</option>
-          <option value="bnb">Binance Coin (BNB)</option>
-          <option value="ada">Cardano (ADA)</option>
-        </select>
-        <img src={arrowDown} alt="arrow" />
+        <TokenSelect/>
       </div>
 
       {/* Submit */}
       <div className="send">
-        <button className="send-btn">Connect Wallet</button>
+        <button className="send-btn" onClick={connectWallet}>{walletConnected ? "Send":"Connect Wallet"}</button>
       </div>
     </div>
   );

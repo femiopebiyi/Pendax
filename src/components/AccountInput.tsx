@@ -47,7 +47,7 @@ const AccountInput = () => {
             <button className="close-btn" onClick={() => setShowPopup(false)}>
               ×
             </button>
-            <p>Enter account number</p>
+            <p className="popup-title">Enter account number</p>
           </div>
 
           {/* Input inside popup */}
