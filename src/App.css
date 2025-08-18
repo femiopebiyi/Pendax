@@ -231,7 +231,7 @@ select#icon option[value="NGN"]   { background-image:url(./assets/icons/nairaIco
   font-weight: 500;
   font-style: medium;
   font-size: 16px;
-  transform: translateY(-7px);
+  transform: translateY(-5px);
   
   
 }
