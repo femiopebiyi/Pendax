@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import nairaIcon from "../assets/icons/nigeriaFlag.svg";
+import nairaIcon from "../assets/icons/nairaIcon.svg";
 import ghanaIcon from "../assets/icons/ghanaFlag.svg";
 import southyIcon from "../assets/icons/southyFlag.svg";
 import arrowDown from "../assets/icons/arrowDown.svg";
 import AccountInput from "./AccountInput";
 import BankSelect from "./BankSelect";
 import TokenSelect from "./TokenSelect";
-import { UIContext } from "../assets/context/WalletConnectContext";
+import { UIContext } from "../context/WalletConnectContext";
+import tickIcon from "../assets/icons/tick.svg";
+import { ClipLoader } from "react-spinners";
 
 const currencies = [
   { code: "NGN", label: "NGN", icon: nairaIcon },
@@ -21,11 +23,27 @@ export function SendForm() {
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
   const selectCurrency = (item: typeof currency) => {
-    
     setCurrency(item);
     setIsOpen(false);
-    
   };
+
+  const [value, setValue] = useState<number | "">("");
+  const [accountValue, setAccountValue] = useState("");
+  const [accountName, setAccountName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/,/g, "");
+    if (/^\d*$/.test(raw)) {
+      if (raw === "" || raw === "0" || !raw.startsWith("0")) {
+        setValue(raw === "" ? "" : Number(raw));
+      }
+    }
+  };
+
+  const formatWithCommas = (num: number) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -41,14 +59,13 @@ export function SendForm() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  //connect wallet 
-
-  const {walletConnected, connectWallet} = useContext(UIContext)
+  // Connect wallet
+  const { walletConnected, connectWallet } = useContext(UIContext);
 
   return (
     <div className="sendform">
+      {/* Currency & Amount */}
       <div className="amount">
-        {/* Currency dropdown */}
         <div style={{ position: "relative", width: "110px" }} ref={dropdownRef}>
           <div
             onClick={toggleDropdown}
@@ -56,32 +73,21 @@ export function SendForm() {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              border: "2px solid #DFE8F9",
+              border: "1px solid #DFE8F9",
               padding: "8px 8px",
               cursor: "pointer",
               borderRadius: "32px",
+              backgroundColor: "white",
               gap: "4px",
             }}
           >
-            {/* Text */}
             <span>{currency.label}</span>
-
-            {/* Flag + arrow group */}
             <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-              <img
-                src={currency.icon}
-                alt=""
-                style={{ width: 20, height: 20 }}
-              />
-              <img
-                src={arrowDown}
-                alt="arrow"
-                style={{ width: 14, height: 14 }}
-              />
+              <img src={currency.icon} alt="" style={{ width: 20, height: 20 }} />
+              <img src={arrowDown} alt="arrow" style={{ width: 14, height: 14 }} />
             </div>
           </div>
 
-          {/* Dropdown list */}
           {isOpen && (
             <div
               style={{
@@ -104,51 +110,81 @@ export function SendForm() {
                     justifyContent: "space-between",
                     padding: "4px 8px",
                     cursor: "pointer",
-                    background:
-                      item.code === currency.code ? "#f0f0f0" : "transparent",
+                    background: item.code === currency.code ? "#f0f0f0" : "transparent",
                   }}
                 >
                   <span>{item.label}</span>
-                  <img
-                    src={item.icon}
-                    alt=""
-                    style={{ width: 20, height: 20 }}
-                  />
+                  <img src={item.icon} alt="" style={{ width: 20, height: 20 }} />
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {/* Amount input */}
         <input
-          type="number"
+          type="text"
           placeholder="Enter amount"
           className="amount-input"
-          min={0}
+          value={value === "" ? "" : formatWithCommas(value)}
+          onChange={handleChange}
         />
       </div>
 
       {/* Account Number */}
       <div className="accountNo">
-        {/* <input placeholder="Enter Account Number" /> */}
-          <AccountInput/>
-        
+        <AccountInput
+          value={accountValue}
+          onChange={setAccountValue}
+          onPopupClose={() => {
+            setAccountName(""); // hide account name
+            setLoading(false);  // stop spinner
+            setError(null);     // clear error
+          }}
+        />
       </div>
 
       {/* Bank Selection */}
       <div className="selBank bank-select-container">
-       <BankSelect/>
+        <BankSelect
+          accountNo={accountValue}
+          onAccountNameChange={setAccountName}
+          onLoadingChange={setLoading}
+          onErrorChange={setError}
+        />
       </div>
+
+      {/* Account Name / Loading */}
+      {(!error && (accountName || loading)) && (
+        <div
+          className="accc-name"
+          style={{ display: "flex", alignItems: "center", gap: "8px" }}
+        >
+          {loading ? (
+            <p>
+              Verifying account... <ClipLoader color={"#296EFA"} size={30} />
+            </p>
+          ) : (
+            <>
+              <h4>{accountName}</h4>
+              <img src={tickIcon} alt="" className="tick" />
+            </>
+          )}
+        </div>
+      )}
+
+      {/* Error Message */}
+      {error && <p className="error-text">{error}</p>}
 
       {/* Token Selection */}
       <div className="selToken">
-        <TokenSelect/>
+        <TokenSelect />
       </div>
 
       {/* Submit */}
       <div className="send">
-        <button className="send-btn" onClick={connectWallet}>{walletConnected ? "Send":"Connect Wallet"}</button>
+        <button className="send-btn" onClick={connectWallet}>
+          {walletConnected ? "Send" : "Connect Wallet"}
+        </button>
       </div>
     </div>
   );

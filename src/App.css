@@ -89,10 +89,11 @@ font-size: 16px;
 .sendPage{
   /* border: 1px solid red; */
  
-  width: 96%;
+  width: 95%;
   margin: 0 auto;
   margin-bottom: 8em;
    margin-top: 5em;
+   /* border: 1px solid red; */
 }
 
 .walletBal{
@@ -168,7 +169,7 @@ padding: 0  1.4em;
   padding: 8px 12px;
   height: 87px;
   border: 1px solid transparent;
-  width: 96%;
+  width: 94%;
   margin: 0 auto;
   border:  1px solid #DFE8F9;
 }
@@ -230,7 +231,7 @@ select#icon option[value="NGN"]   { background-image:url(./assets/icons/nairaIco
   font-weight: 500;
   font-style: medium;
   font-size: 16px;
-  transform: translateY(-5px);
+  transform: translateY(-7px);
   
   
 }
@@ -256,9 +257,39 @@ select#icon option[value="NGN"]   { background-image:url(./assets/icons/nairaIco
   height: 72px;
   background-color: #F5F7FE; /* light blue-ish background */
   border-radius: 16px;
-  width: 96%;
+  width: 94%;
   margin: 1em auto 0 auto;
   /* z-index: 100002; */
+}
+
+.accc-name{
+  /* border: 1px solid red; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 94%;
+  margin: 8px auto 0 auto;
+  background-color: #E2E8FF;
+  padding: 1em 1em;
+  border-radius: 16px;
+}
+
+.accc-name p{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.accc-name h4{
+  font-weight: 600;
+  font-style: semi-bold;
+  font-size: 16px;
+  color: #296EFA;
+}
+
+.error-text{
+  text-align: center;
+  color: red;
 }
 
 .accountNo input{
@@ -297,7 +328,7 @@ select#icon option[value="NGN"]   { background-image:url(./assets/icons/nairaIco
   padding: 10px 0;
   
   position: relative;
-  width: 97%;
+  width: 94%;
   margin: 1em auto 0 auto;
   height: 72px;
 }
@@ -315,11 +346,16 @@ select#icon option[value="NGN"]   { background-image:url(./assets/icons/nairaIco
   padding-left: .7em;
 }
 
-.sendform .send{
+.sendform {
   margin: 1em auto 0 auto;
-  width: 97%;
+  width: 100%;
   display: block;
 
+}
+
+.send{
+  width: 95%;
+  margin: 1em auto 0 auto;
 }
 
 .send-btn {

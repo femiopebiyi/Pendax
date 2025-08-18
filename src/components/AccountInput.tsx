@@ -1,7 +1,7 @@
-import  { useState } from "react";
+import { useState } from "react";
 import "../assets/styling/AccountInput.css";
-import gtIcon from "../assets/icons/gtIcon.svg"
-import recentIcon from "../assets/icons/recent.svg"
+import gtIcon from "../assets/icons/gtIcon.svg";
+import recentIcon from "../assets/icons/recent.svg";
 
 interface Transaction {
   id: number;
@@ -16,82 +16,96 @@ const recentTransactions: Transaction[] = [
   { id: 3, name: "David Johnson", accountNumber: "1122334455", bank: "Zenith Bank" },
 ];
 
-const AccountInput = () => {
-  const [inputValue, setInputValue] = useState("");
+interface AccountInputProps {
+  value: string;
+  onChange: (val: string) => void;
+  onPopupClose?: () => void; // optional callback to notify parent
+}
+
+const AccountInput = ({ value, onChange, onPopupClose }: AccountInputProps) => {
   const [showPopup, setShowPopup] = useState(false);
 
+  // Filter recents based on current value
   const filteredTransactions = recentTransactions.filter((t) =>
-    t.accountNumber.includes(inputValue)
+    t.accountNumber.includes(value)
   );
+
+  // Only numbers, max 10 digits
+  const handleInputChange = (val: string) => {
+    const numeric = val.replace(/\D/g, ""); // remove non-digits
+    const limited = numeric.slice(0, 10);   // limit to 10 characters
+    onChange(limited);
+  };
 
   return (
     <div>
-      {/* Input (outside overlay) */}
+      {/* Main input */}
       <input
         type="text"
         placeholder="Enter account number"
-        value={inputValue}
+        value={value}
         onFocus={() => setShowPopup(true)}
         onChange={(e) => {
-          setInputValue(e.target.value);
+          handleInputChange(e.target.value);
           setShowPopup(true);
         }}
         className="account-input"
       />
 
-      {/* Fullscreen Popup */}
+      {/* Popup overlay */}
       {showPopup && (
         <div className="popup-overlay">
-          {/* Header */}
           <div className="popup-header">
-            <button className="close-btn" onClick={() => setShowPopup(false)}>
+            <button
+              className="close-btn"
+              onClick={() => {
+                setShowPopup(false);
+                if (onPopupClose) onPopupClose(); // notify parent when popup closes
+              }}
+            >
               ×
             </button>
             <p className="popup-title">Enter account number</p>
           </div>
 
-          {/* Input inside popup */}
           <div className="popup-input-container">
             <input
               type="text"
               placeholder="Enter account number"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              value={value}
+              onChange={(e) => handleInputChange(e.target.value)}
               className="account-input"
               autoFocus
+              id="acc-no"
             />
           </div>
 
-          {/* Recents list */}
           <div className="popup-recents">
-            <p className="recents-title"><img src={recentIcon} alt="" />&nbsp;&nbsp;Recents</p>
+            <p className="recents-title">
+              <img src={recentIcon} alt="" />
+              &nbsp;&nbsp;Recents
+            </p>
+
             {filteredTransactions.map((t) => (
-                    <div
-                        key={t.id}
-                        className="recent-item"
-                        onClick={() => {
-                        setInputValue(t.accountNumber);
-                        setShowPopup(false);
-                        }}
-                    >
-                        {/* Left: Name + Account */}
-                        <div className="recent-details">
-                        <p className="recent-name">{t.name}</p>
-                        <p className="recent-account">{t.accountNumber}</p>
-                        </div>
+              <div
+                key={t.id}
+                className="recent-item"
+                onClick={() => {
+                  onChange(t.accountNumber);
+                  setShowPopup(false);
+                  if (onPopupClose) onPopupClose(); // notify parent here too
+                }}
+              >
+                <div className="recent-details">
+                  <p className="recent-name">{t.name}</p>
+                  <p className="recent-account">{t.accountNumber}</p>
+                </div>
 
-                        {/* Middle: Bank logo */}
-                        <img
-                        src= {gtIcon}
-                        alt="bank"
-                        className="bank-logo"
-                        />
+                <img src={gtIcon} alt="bank" className="bank-logo" />
 
-                        {/* Right: Bank name */}
-                        <span className="recent-bank">{t.bank}</span>
-                    </div>
-))}
-
+                <span className="recent-bank">{t.bank}</span>
+              </div>
+            ))}
           </div>
         </div>
       )}

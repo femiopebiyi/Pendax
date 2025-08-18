@@ -1,22 +1,23 @@
 import { useState } from "react";
 import "../assets/styling/BankDetails.css";
-import arrowDown from "../assets/icons/arrowDown.svg"
-import gtIcon from "../assets/icons/gtIcon.svg"
+import arrowDown from "../assets/icons/arrowDown.svg";
+import gtIcon from "../assets/icons/gtIcon.svg";
+import { banks, type Bank } from "../functionalities/Banks";
+import { verifyBankAccount } from "../functionalities/getBankDetails";
 
-interface Bank {
-  id: number;
-  name: string;
-  icon: string;
+interface BankSelectProps {
+  accountNo: string;
+  onAccountNameChange: (name: string) => void;
+  onLoadingChange: (isLoading: boolean) => void;
+  onErrorChange: (errorMessage: string | null) => void;
 }
 
-const banks: Bank[] = [
-  { id: 1, name: "AAA FINANCE", icon: "https://cdn-icons-png.flaticon.com/512/3135/3135673.png" },
-  { id: 2, name: "BBB MICROFINANCE", icon: "https://cdn-icons-png.flaticon.com/512/3135/3135673.png" },
-  { id: 3, name: "CCC BANK", icon: "https://cdn-icons-png.flaticon.com/512/3135/3135673.png" },
-  { id: 4, name: "DDD SAVINGS", icon: "https://cdn-icons-png.flaticon.com/512/3135/3135673.png" },
-];
-
-const BankSelect = () => {
+const BankSelect = ({
+  accountNo,
+  onAccountNameChange,
+  onLoadingChange,
+  onErrorChange,
+}: BankSelectProps) => {
   const [showPopup, setShowPopup] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
@@ -27,14 +28,10 @@ const BankSelect = () => {
 
   return (
     <div className="bank-input-con">
-      {/* Input container with bank logo */}
+      {/* Input container */}
       <div className="bank-input-wrapper">
         {selectedBank && (
-          <img
-            src={gtIcon}
-            alt="bank"
-            className="selected-bank-icon"
-          />
+          <img src={gtIcon} alt="bank" className="selected-bank-icon" />
         )}
         <input
           type="text"
@@ -44,7 +41,9 @@ const BankSelect = () => {
           readOnly
           className="open-input"
         />
-        <span className="arrow-bank"><img src={arrowDown} alt="" /></span>
+        <span className="arrow-bank">
+          <img src={arrowDown} alt="" />
+        </span>
       </div>
 
       {/* Popup */}
@@ -73,12 +72,28 @@ const BankSelect = () => {
               <div
                 key={bank.id}
                 className="bank-item"
-                onClick={() => {
-                  setSelectedBank(bank); // store whole bank object
+                onClick={async () => {
+                  setSelectedBank(bank);
                   setShowPopup(false);
+
+                  onLoadingChange(true);
+                  onErrorChange(null); // clear previous errors
+
+                  try {
+                    console.log(accountNo)
+                    const result = await verifyBankAccount(accountNo, bank.id);
+                    onAccountNameChange(result.data.account_name);
+                  } catch (error) {
+                    console.error("Verification failed:", error);
+                    onErrorChange(
+                      "failed!!!, check account number"
+                    );
+                  } finally {
+                    onLoadingChange(false);
+                  }
                 }}
               >
-                <img src={bank.icon} alt="bank" className="bank-icon" />
+                <img src={gtIcon} alt="bank" className="bank-icon" />
                 <span className="bank-name">{bank.name}</span>
               </div>
             ))}

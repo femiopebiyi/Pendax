@@ -3,7 +3,7 @@ import { Navbar } from "./components/Navbar"
 import "./App.css"
 import { SendPage } from "./pages/SendPage"
 import Footer from "./components/Footer"
-import { WalletConnectProvider } from "./assets/context/WalletConnectContext"
+import { WalletConnectProvider } from "./context/WalletConnectContext"
 
 function App() {
 

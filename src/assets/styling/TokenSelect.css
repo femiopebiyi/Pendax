@@ -61,7 +61,8 @@
   justify-content: space-between;
   padding: 12px 16px;
   font-weight: bold;
-  border-bottom: 1px solid #eee;
+  border: none;
+   background-color: #F5F7FE;
   
 }
 
@@ -77,6 +78,7 @@
   text-align: center;
   font-size: 16px;
   color: #3366ff;
+  padding: 1.3em 0;
 }
 
 .popup-list{
@@ -85,11 +87,11 @@
 
 /* Token list */
 .popup-list {
-  margin-top: 10px;
+  margin: 1em auto 0 auto;
   display: flex;
   flex-direction: column;
   padding: 0 10px;
-  /* border: 1px solid blue; */
+  width: 95%;
 }
 
 
@@ -104,6 +106,7 @@
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
   height: 89px;
+  width: 100%;
 }
 
 .lefttok{

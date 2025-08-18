@@ -1,6 +1,6 @@
 import pendaxIcon from  "../assets/icons/pendaxIcon.svg"
 import { verifyBankAccount } from "../functionalities/getBankDetails";
-import { UIContext } from "../assets/context/WalletConnectContext";
+import { UIContext } from "../context/WalletConnectContext";
 import { useContext } from "react";
 // import pendaxLogo from "../assets/icons/pendaxLogo.png
 import profile from "../assets/icons/Ellipse.png"
