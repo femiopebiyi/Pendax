@@ -1,15 +1,21 @@
-
-
 import { useState } from "react";
 import "../assets/styling/TokenSelect.css";
-import arrowDown from "../assets/icons/arrowDown.svg"
+import arrowDown from "../assets/icons/arrowDown.svg";
 import { tokens, type Token } from "../functionalities/TokenDetails";
 
+interface TokenSelectProps {
+  onSelect: (token: Token) => void; // notify parent
+}
 
-
-const TokenSelect = () => {
+const TokenSelect = ({ onSelect }: TokenSelectProps) => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedToken, setSelectedToken] = useState<Token | null>(null);
+
+  const handleSelect = (token: Token) => {
+    setSelectedToken(token);
+    onSelect(token); // send selected token to parent
+    setShowPopup(false);
+  };
 
   return (
     <div className="token-input-con">
@@ -47,10 +53,7 @@ const TokenSelect = () => {
               <div
                 key={token.id}
                 className="token-item"
-                onClick={() => {
-                  setSelectedToken(token);
-                  setShowPopup(false);
-                }}
+                onClick={() => handleSelect(token)}
               >
                 <div className="lefttok">
                   <img src={token.icon} alt="token" className="token-icon" />

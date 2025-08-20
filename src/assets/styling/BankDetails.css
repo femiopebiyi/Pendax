@@ -68,9 +68,10 @@
 }
 
 .selected-bank-icon {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
+  transform: scale(1.2);
 }
 
 .selected-bank-name {

@@ -67,8 +67,12 @@ font-style: bold;
 font-size: 16px;
 }
 
-.con h2{
-  color: #661ACF; 
+.addy{
+  color: black;
+}
+
+.pendax{
+  color:#661ACF;
 }
 
 .smallIcons{

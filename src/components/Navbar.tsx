@@ -1,27 +1,16 @@
 import pendaxIcon from  "../assets/icons/pendaxIcon.svg"
-import { verifyBankAccount } from "../functionalities/getBankDetails";
 import { UIContext } from "../context/WalletConnectContext";
 import { useContext } from "react";
 // import pendaxLogo from "../assets/icons/pendaxLogo.png
-import profile from "../assets/icons/Ellipse.png"
-
-
- 
+import profile from "../assets/icons/Ellipse.png";
+import brightnessIcon from "../assets/icons/brightnessIcon.svg"
+import messageIcon from "../assets/icons/messageIcon.svg"
+import bellIcon from "../assets/icons/bellIcon.svg"
 
 export function Navbar(){
 
     
-    (async () => {
-  try {
-    const result = await verifyBankAccount("9066245634", "999992");
-    console.log(result.data.account_name);
-    console.log(result.data.account_number);
-    console.log(result.data.bank_id);
-  } catch (error) {
-    console.error("Verification failed:", error);
-  }
-})();
-   
+
      
    const { walletConnected, connectWallet } = useContext(UIContext)
 
@@ -30,15 +19,27 @@ export function Navbar(){
     return <div className="navbar" >
         <div className="con">
             <img src={walletConnected ? profile : pendaxIcon} alt="pendaxIcon" className="pendaxIcon"/>
-            <h2 className={walletConnected ? "connected" : ""}>{!walletConnected ? "Pendax" : "Hi, 0xd2...f3d"}</h2>
+            {walletConnected ? (
+                <h2 className="addy">Hi, 0xd2...f3d</h2>
+            ):(
+                <h2 className="pendax">Pendax</h2>
+            )}
         </div>
 
-        {/* <div className="smallIcons">
-            <img src={brighnessIcon} alt="" />
+        
+        
+        {walletConnected ? (
+            <div className="smallIcons">
+            <img src={brightnessIcon} alt="" />
             <img src={messageIcon} alt="" />
             <img src={bellIcon} alt="" />
-        </div> */}
+        </div>
+        ):(
+            <button className="connnect" onClick={connectWallet}>Connect Wallet</button>
+        )}
+        
 
-        <button className="connnect" onClick={connectWallet}>{!walletConnected ? "Connect Wallet" : "Connected"}</button>
+        
+        
     </div>
 }

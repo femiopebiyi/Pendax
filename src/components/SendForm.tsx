@@ -9,6 +9,7 @@ import TokenSelect from "./TokenSelect";
 import { UIContext } from "../context/WalletConnectContext";
 import tickIcon from "../assets/icons/tick.svg";
 import { ClipLoader } from "react-spinners";
+import type { Token } from "../functionalities/TokenDetails";
 
 const currencies = [
   { code: "NGN", label: "NGN", icon: nairaIcon },
@@ -27,11 +28,14 @@ export function SendForm() {
     setIsOpen(false);
   };
 
+  
+
   const [value, setValue] = useState<number | "">("");
   const [accountValue, setAccountValue] = useState("");
   const [accountName, setAccountName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [chosenToken, setChosenToken] = useState<Token | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/,/g, "");
@@ -61,6 +65,12 @@ export function SendForm() {
 
   // Connect wallet
   const { walletConnected, connectWallet } = useContext(UIContext);
+
+  const isFormValid =
+  value !== "" &&              // Amount is entered
+  accountValue.length === 10 && // Account number has 10 digits
+  accountName !== "" &&         // Bank account was verified
+  chosenToken !== null;         // Token selected
 
   return (
     <div className="sendform">
@@ -177,15 +187,41 @@ export function SendForm() {
 
       {/* Token Selection */}
       <div className="selToken">
-        <TokenSelect />
+        <TokenSelect onSelect={(token) => setChosenToken(token)}/>
       </div>
 
       {/* Submit */}
+      
+
       <div className="send">
-        <button className="send-btn" onClick={connectWallet}>
-          {walletConnected ? "Send" : "Connect Wallet"}
-        </button>
-      </div>
+  {walletConnected ? (
+    <button
+      className="send-btn"
+      disabled={!isFormValid}
+      style={{
+        opacity: isFormValid ? 1 : 0.5,
+        cursor: isFormValid ? "pointer" : "not-allowed",
+      }}
+      onClick={() => {
+        if (!isFormValid) return; // extra safety
+        console.log("Sending transaction with:", {
+          amount: value,
+          accountNo: accountValue,
+          bank: accountName,
+          token: chosenToken,
+        });
+        // ✅ place your send transaction logic here
+      }}
+    >
+      Send
+    </button>
+  ) : (
+    <button className="send-btn" onClick={connectWallet}>
+      Connect Wallet
+    </button>
+  )}
+</div>
+
     </div>
   );
 }

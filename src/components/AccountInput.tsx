@@ -37,6 +37,13 @@ const AccountInput = ({ value, onChange, onPopupClose }: AccountInputProps) => {
     onChange(limited);
   };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      setShowPopup(false);
+      onPopupClose?.(); // notify parent that popup is closed
+    }
+  };
+
   return (
     <div>
       {/* Main input */}
@@ -77,6 +84,7 @@ const AccountInput = ({ value, onChange, onPopupClose }: AccountInputProps) => {
               className="account-input"
               autoFocus
               id="acc-no"
+              onKeyDown={handleKeyDown}
             />
           </div>
 

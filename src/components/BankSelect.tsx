@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "../assets/styling/BankDetails.css";
 import arrowDown from "../assets/icons/arrowDown.svg";
-import gtIcon from "../assets/icons/gtIcon.svg";
 import { banks, type Bank } from "../functionalities/Banks";
 import { verifyBankAccount } from "../functionalities/getBankDetails";
 
@@ -31,7 +30,7 @@ const BankSelect = ({
       {/* Input container */}
       <div className="bank-input-wrapper">
         {selectedBank && (
-          <img src={gtIcon} alt="bank" className="selected-bank-icon" />
+          <img src={selectedBank.icon} alt="bank" className="selected-bank-icon" />
         )}
         <input
           type="text"
@@ -93,7 +92,7 @@ const BankSelect = ({
                   }
                 }}
               >
-                <img src={gtIcon} alt="bank" className="bank-icon" />
+                <img src={bank.icon} alt="bank" className="bank-icon" />
                 <span className="bank-name">{bank.name}</span>
               </div>
             ))}
