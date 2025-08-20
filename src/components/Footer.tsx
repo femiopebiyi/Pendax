@@ -11,6 +11,7 @@ export default function Footer() {
 
 
     return <div className="footer">
+        
         <div className="nav-btn">
             <img src={sendIcon} alt="" />
             <h2 className="send-txt">Send</h2>

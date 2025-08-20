@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "../assets/styling/AccountInput.css";
 import gtIcon from "../assets/icons/gtIcon.svg";
 import recentIcon from "../assets/icons/recent.svg";
+import { UIContext } from "../context/WalletConnectContext";
 
 interface Transaction {
   id: number;
@@ -43,6 +44,8 @@ const AccountInput = ({ value, onChange, onPopupClose }: AccountInputProps) => {
       onPopupClose?.(); // notify parent that popup is closed
     }
   };
+
+  const { walletConnected } = useContext(UIContext)
 
   return (
     <div>
@@ -88,7 +91,7 @@ const AccountInput = ({ value, onChange, onPopupClose }: AccountInputProps) => {
             />
           </div>
 
-          <div className="popup-recents">
+          <div className="popup-recents" style={{display: walletConnected ? "block": "none"}}>
             <p className="recents-title">
               <img src={recentIcon} alt="" />
               &nbsp;&nbsp;Recents
