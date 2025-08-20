@@ -11,7 +11,7 @@ export function WalletBalance(){
     function changeBalVisibility(){
         setBalanceVisibility(!balanceVisibility)
     }
-    const { walletConnected, connectWallet } = useContext(UIContext)
+    const { walletConnected } = useContext(UIContext)
 
     return <div className="walletBal">
             <div className="balance_sec">
