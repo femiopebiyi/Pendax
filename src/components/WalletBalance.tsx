@@ -26,7 +26,7 @@ export function WalletBalance(){
                 {walletConnected ? (
                   <p>{balanceVisibility ? "$1287.45" : "****"}</p>
                 ):(
-                  <p>blank</p>
+                  <p>****</p>
                 ) }
             </div>
             <div className="history">

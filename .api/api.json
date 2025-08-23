@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "apis": [
+    {
+      "identifier": "quidax",
+      "source": "@quidax/v1.0#10cyn61umb0lmzex",
+      "integrity": "sha512-3PByo4Ru64lWW/pjTiI9p2WreTTkzlojjFyk9PQPJupy3Mg9hQMpxD5+gBalb8shHID+1lkwScoLVZElB61jew==",
+      "installerVersion": "6.1.3"
+    }
+  ]
+}

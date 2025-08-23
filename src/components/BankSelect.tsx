@@ -9,6 +9,7 @@ interface BankSelectProps {
   onAccountNameChange: (name: string) => void;
   onLoadingChange: (isLoading: boolean) => void;
   onErrorChange: (errorMessage: string | null) => void;
+  onBankChange: (bank: Bank | null) => void; // 🔹 new prop
 }
 
 const BankSelect = ({
@@ -16,6 +17,7 @@ const BankSelect = ({
   onAccountNameChange,
   onLoadingChange,
   onErrorChange,
+  onBankChange,
 }: BankSelectProps) => {
   const [showPopup, setShowPopup] = useState(false);
   const [search, setSearch] = useState("");
@@ -29,8 +31,12 @@ const BankSelect = ({
     <div className="bank-input-con">
       {/* Input container */}
       <div className="bank-input-wrapper">
-        {selectedBank && (
-          <img src={selectedBank.icon} alt="bank" className="selected-bank-icon" />
+        {selectedBank?.icon && (
+          <img
+            src={selectedBank.icon}
+            alt="bank"
+            className="selected-bank-icon"
+          />
         )}
         <input
           type="text"
@@ -73,26 +79,25 @@ const BankSelect = ({
                 className="bank-item"
                 onClick={async () => {
                   setSelectedBank(bank);
+                  onBankChange(bank); // 🔹 notify parent
                   setShowPopup(false);
 
                   onLoadingChange(true);
-                  onErrorChange(null); // clear previous errors
+                  onErrorChange(null);
 
                   try {
-                    console.log(accountNo)
                     const result = await verifyBankAccount(accountNo, bank.id);
                     onAccountNameChange(result.data.account_name);
                   } catch (error) {
-                    console.error("Verification failed:", error);
-                    onErrorChange(
-                      "failed!!!, check account number"
-                    );
+                    onErrorChange("failed!!!, check account number");
                   } finally {
                     onLoadingChange(false);
                   }
                 }}
               >
-                <img src={bank.icon} alt="bank" className="bank-icon" />
+                {bank.icon && (
+                  <img src={bank.icon} alt="bank" className="bank-icon" />
+                )}
                 <span className="bank-name">{bank.name}</span>
               </div>
             ))}

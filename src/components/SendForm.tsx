@@ -10,6 +10,8 @@ import { UIContext } from "../context/WalletConnectContext";
 import tickIcon from "../assets/icons/tick.svg";
 import { ClipLoader } from "react-spinners";
 import type { Token } from "../functionalities/TokenDetails";
+import { TransactionPopUp } from "./TransactionPopUp";
+import type { Bank } from "../functionalities/Banks";
 
 const currencies = [
   { code: "NGN", label: "NGN", icon: nairaIcon },
@@ -22,27 +24,27 @@ export function SendForm() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const toggleDropdown = () => setIsOpen((prev) => !prev);
-  const selectCurrency = (item: typeof currency) => {
-    setCurrency(item);
-    setIsOpen(false);
-  };
-
-  
-
   const [value, setValue] = useState<number | "">("");
   const [accountValue, setAccountValue] = useState("");
   const [accountName, setAccountName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [chosenToken, setChosenToken] = useState<Token | null>(null);
+  const [amount, setAmount] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
+
+  const toggleDropdown = () => setIsOpen((prev) => !prev);
+  const selectCurrency = (item: typeof currency) => {
+    setCurrency(item);
+    setIsOpen(false);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/,/g, "");
     if (/^\d*$/.test(raw)) {
-      if (raw === "" || raw === "0" || !raw.startsWith("0")) {
-        setValue(raw === "" ? "" : Number(raw));
-      }
+      setValue(raw === "" ? "" : Number(raw));
+      setAmount(raw);
     }
   };
 
@@ -63,14 +65,25 @@ export function SendForm() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Connect wallet
   const { walletConnected, connectWallet } = useContext(UIContext);
 
+  // ✅ form validation
   const isFormValid =
-  value !== "" &&              // Amount is entered
-  accountValue.length === 10 && // Account number has 10 digits
-  accountName !== "" &&         // Bank account was verified
-  chosenToken !== null;         // Token selected
+    value !== "" &&
+    /^\d{10}$/.test(accountValue.trim()) && // exactly 10 digits
+    accountName !== "" &&
+    chosenToken !== null &&
+    selectedBank !== null;
+
+  // Debug logs
+  console.log({
+    value,
+    accountValue,
+    accountName,
+    chosenToken,
+    selectedBank,
+    isFormValid,
+  });
 
   return (
     <div className="sendform">
@@ -120,7 +133,8 @@ export function SendForm() {
                     justifyContent: "space-between",
                     padding: "4px 8px",
                     cursor: "pointer",
-                    background: item.code === currency.code ? "#f0f0f0" : "transparent",
+                    background:
+                      item.code === currency.code ? "#f0f0f0" : "transparent",
                   }}
                 >
                   <span>{item.label}</span>
@@ -140,15 +154,21 @@ export function SendForm() {
         />
       </div>
 
+      {Number(amount) > 0 && (
+        <p className="usdtConverted">
+          You will pay ${(Number(amount) * 0.00065317).toFixed(1)}
+        </p>
+      )}
+
       {/* Account Number */}
       <div className="accountNo">
         <AccountInput
           value={accountValue}
           onChange={setAccountValue}
           onPopupClose={() => {
-            setAccountName(""); // hide account name
-            setLoading(false);  // stop spinner
-            setError(null);     // clear error
+            setAccountName("");
+            setLoading(false);
+            setError(null);
           }}
         />
       </div>
@@ -160,11 +180,12 @@ export function SendForm() {
           onAccountNameChange={setAccountName}
           onLoadingChange={setLoading}
           onErrorChange={setError}
+          onBankChange={setSelectedBank}
         />
       </div>
 
       {/* Account Name / Loading */}
-      {(!error && (accountName || loading)) && (
+      {!error && (accountName || loading) && (
         <div
           className="accc-name"
           style={{ display: "flex", alignItems: "center", gap: "8px" }}
@@ -187,41 +208,45 @@ export function SendForm() {
 
       {/* Token Selection */}
       <div className="selToken">
-        <TokenSelect onSelect={(token) => setChosenToken(token)}/>
+        <TokenSelect onSelect={(token) => setChosenToken(token)} />
       </div>
 
       {/* Submit */}
-      
-
       <div className="send">
-  {walletConnected ? (
-    <button
-      className="send-btn"
-      disabled={!isFormValid}
-      style={{
-        opacity: isFormValid ? 1 : 0.5,
-        cursor: isFormValid ? "pointer" : "not-allowed",
-      }}
-      onClick={() => {
-        if (!isFormValid) return; // extra safety
-        console.log("Sending transaction with:", {
-          amount: value,
-          accountNo: accountValue,
-          bank: accountName,
-          token: chosenToken,
-        });
-        // ✅ place your send transaction logic here
-      }}
-    >
-      Send
-    </button>
-  ) : (
-    <button className="send-btn" onClick={connectWallet}>
-      Connect Wallet
-    </button>
-  )}
-</div>
+        {walletConnected ? (
+          <button
+            className="send-btn"
+            disabled={!isFormValid}
+            style={{
+              opacity: isFormValid ? 1 : 0.5,
+              cursor: isFormValid ? "pointer" : "not-allowed",
+            }}
+            onClick={() => {
+              if (!isFormValid) return;
+              setShowPopup(true);
+            }}
+          >
+            Send
+          </button>
+        ) : (
+          <button className="send-btn" onClick={connectWallet}>
+            Connect Wallet
+          </button>
+        )}
+      </div>
 
+      {/* Popup */}
+      {showPopup && (
+        <TransactionPopUp
+          amount={value}
+          accountNo={accountValue}
+          accountName={accountName}
+          bank={selectedBank?.name || ""}
+          bankIcon={selectedBank?.icon || ""}
+          token={chosenToken}
+          onClose={() => setShowPopup(false)}
+        />
+      )}
     </div>
   );
 }
