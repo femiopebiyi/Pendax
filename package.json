@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@solana/wallet-adapter-react": "^0.15.39",
+    "@solana/wallet-adapter-react-ui": "^0.9.39",
+    "@solana/wallet-adapter-wallets": "^0.19.37",
     "axios": "^1.11.0",
     "dotenv": "^17.2.1",
     "https": "^1.0.0",
@@ -21,9 +24,11 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
+    "@types/istanbul-reports": "^3.0.4",
     "@types/node": "^24.2.1",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
+    "@types/ws": "^8.18.1",
     "@vitejs/plugin-react": "^4.7.0",
     "eslint": "^9.32.0",
     "eslint-plugin-react-hooks": "^5.2.0",

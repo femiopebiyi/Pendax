@@ -11,7 +11,7 @@ interface TransactionPopUpProps {
 }
 
 export function TransactionPopUp({
- amount,
+  amount,
   accountNo,
   accountName,
   bank,
@@ -21,7 +21,6 @@ export function TransactionPopUp({
 }: TransactionPopUpProps) {
   return (
     <div className="confirmation-con">
-      {/* Close button */}
       <h6 onClick={onClose}>X</h6>
 
       <h1>₦{amount.toLocaleString()}</h1>
@@ -54,7 +53,9 @@ export function TransactionPopUp({
       </div>
 
       <button className="paynow">Pay Now</button>
-      <button className="cancel" onClick={onClose}>Cancel</button>
+      <button className="cancel" onClick={onClose}>
+        Cancel
+      </button>
     </div>
   );
 }

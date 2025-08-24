@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef } from "react";
 import nairaIcon from "../assets/icons/nairaIcon.svg";
 import ghanaIcon from "../assets/icons/ghanaFlag.svg";
 import southyIcon from "../assets/icons/southyFlag.svg";
@@ -6,12 +6,13 @@ import arrowDown from "../assets/icons/arrowDown.svg";
 import AccountInput from "./AccountInput";
 import BankSelect from "./BankSelect";
 import TokenSelect from "./TokenSelect";
-import { UIContext } from "../context/WalletConnectContext";
 import tickIcon from "../assets/icons/tick.svg";
 import { ClipLoader } from "react-spinners";
 import type { Token } from "../functionalities/TokenDetails";
 import { TransactionPopUp } from "./TransactionPopUp";
 import type { Bank } from "../functionalities/Banks";
+import { WalletModal } from "./WalletConnect";   // ✅ your custom modal
+import { useWallet } from "@solana/wallet-adapter-react";
 
 const currencies = [
   { code: "NGN", label: "NGN", icon: nairaIcon },
@@ -34,6 +35,10 @@ export function SendForm() {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
 
+  // ✅ wallet state
+  const { connected, publicKey } = useWallet();
+  const [showWalletModal, setShowWalletModal] = useState(false);
+
   const toggleDropdown = () => setIsOpen((prev) => !prev);
   const selectCurrency = (item: typeof currency) => {
     setCurrency(item);
@@ -54,10 +59,7 @@ export function SendForm() {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -65,25 +67,22 @@ export function SendForm() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const { walletConnected, connectWallet } = useContext(UIContext);
-
   // ✅ form validation
   const isFormValid =
     value !== "" &&
-    /^\d{10}$/.test(accountValue.trim()) && // exactly 10 digits
+    /^\d{10}$/.test(accountValue.trim()) &&
     accountName !== "" &&
     chosenToken !== null &&
     selectedBank !== null;
 
-  // Debug logs
-  console.log({
-    value,
-    accountValue,
-    accountName,
-    chosenToken,
-    selectedBank,
-    isFormValid,
-  });
+  // Lock scroll when popup is open
+  useEffect(() => {
+    if (showPopup) {
+      document.body.style.overflowY = "hidden";
+    } else {
+      document.body.style.overflowY = "auto";
+    }
+  }, [showPopup]);
 
   return (
     <div className="sendform">
@@ -186,10 +185,7 @@ export function SendForm() {
 
       {/* Account Name / Loading */}
       {!error && (accountName || loading) && (
-        <div
-          className="accc-name"
-          style={{ display: "flex", alignItems: "center", gap: "8px" }}
-        >
+        <div className="accc-name" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           {loading ? (
             <p>
               Verifying account... <ClipLoader color={"#296EFA"} size={30} />
@@ -213,7 +209,7 @@ export function SendForm() {
 
       {/* Submit */}
       <div className="send">
-        {walletConnected ? (
+        {connected ? (
           <button
             className="send-btn"
             disabled={!isFormValid}
@@ -224,12 +220,13 @@ export function SendForm() {
             onClick={() => {
               if (!isFormValid) return;
               setShowPopup(true);
+              console.log("Wallet Address:", publicKey?.toBase58());
             }}
           >
             Send
           </button>
         ) : (
-          <button className="send-btn" onClick={connectWallet}>
+          <button className="send-btn" onClick={() => setShowWalletModal(true)}>
             Connect Wallet
           </button>
         )}
@@ -237,16 +234,21 @@ export function SendForm() {
 
       {/* Popup */}
       {showPopup && (
-        <TransactionPopUp
-          amount={value}
-          accountNo={accountValue}
-          accountName={accountName}
-          bank={selectedBank?.name || ""}
-          bankIcon={selectedBank?.icon || ""}
-          token={chosenToken}
-          onClose={() => setShowPopup(false)}
-        />
+        <div className="popup-overlays">
+          <TransactionPopUp
+            amount={value}
+            accountNo={accountValue}
+            accountName={accountName}
+            bank={selectedBank?.name || ""}
+            bankIcon={selectedBank?.icon || ""}
+            token={chosenToken}
+            onClose={() => setShowPopup(false)}
+          />
+        </div>
       )}
+
+      {/* Wallet Modal */}
+      {showWalletModal && <WalletModal onClose={() => setShowWalletModal(false)} />}
     </div>
   );
 }

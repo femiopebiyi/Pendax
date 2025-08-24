@@ -1,45 +1,54 @@
-import pendaxIcon from  "../assets/icons/pendaxIcon.svg"
-import { UIContext } from "../context/WalletConnectContext";
-import { useContext } from "react";
-// import pendaxLogo from "../assets/icons/pendaxLogo.png
+import { useState } from "react";
+import pendaxIcon from "../assets/icons/pendaxIcon.svg";
 import profile from "../assets/icons/Ellipse.png";
-import brightnessIcon from "../assets/icons/brightnessIcon.svg"
-import messageIcon from "../assets/icons/messageIcon.svg"
-import bellIcon from "../assets/icons/bellIcon.svg"
+import brightnessIcon from "../assets/icons/brightnessIcon.svg";
+import messageIcon from "../assets/icons/messageIcon.svg";
+import bellIcon from "../assets/icons/bellIcon.svg";
+import { WalletModal } from "./WalletConnect";
+import { useWallet } from "@solana/wallet-adapter-react";
 
-export function Navbar(){
+export function Navbar() {
+  const [showModal, setShowModal] = useState(false);
+  const { connected, publicKey } = useWallet();
 
-    
+  const handleConnectClick = () => {
+    setShowModal(true);
+  };
 
-     
-   const { walletConnected, connectWallet } = useContext(UIContext)
-
-
-
-    return <div className="navbar" >
+  return (
+    <>
+      <div className="navbar">
         <div className="con">
-            <img src={walletConnected ? profile : pendaxIcon} alt="pendaxIcon" className="pendaxIcon"/>
-            {walletConnected ? (
-                <h2 className="addy">Hi, 0xd2...f3d</h2>
-            ):(
-                <h2 className="pendax">Pendax</h2>
-            )}
+          <img
+            src={connected ? profile : pendaxIcon}
+            alt="pendaxIcon"
+            className="pendaxIcon"
+          />
+          {connected ? (
+            <h2 className="addy">
+              Hi, {publicKey ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : ""}
+            </h2>
+          ) : (
+            <h2 className="pendax">Pendax</h2>
+          )}
         </div>
 
-        
-        
-        {walletConnected ? (
-            <div className="smallIcons">
-            <img src={brightnessIcon} alt="" />
-            <img src={messageIcon} alt="" />
-            <img src={bellIcon} alt="" />
-        </div>
-        ):(
-            <button className="connnect" onClick={connectWallet}>Connect Wallet</button>
+        {connected ? (
+          <div className="smallIcons">
+            <img src={brightnessIcon} alt="brightness" />
+            <img src={messageIcon} alt="message" />
+            <img src={bellIcon} alt="notifications" />
+          </div>
+        ) : (
+          <button className="connect" onClick={handleConnectClick}>
+            Connect
+          </button>
         )}
-        
+      </div>
 
-        
-        
-    </div>
+      {showModal && (
+        <WalletModal onClose={() => setShowModal(false)} />
+      )}
+    </>
+  );
 }
