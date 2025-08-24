@@ -41,7 +41,7 @@ export function Navbar() {
           </div>
         ) : (
           <button className="connect" onClick={handleConnectClick}>
-            Connect
+            Connect Wallet
           </button>
         )}
       </div>
