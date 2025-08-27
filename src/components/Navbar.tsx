@@ -26,7 +26,7 @@ export function Navbar() {
           />
           {connected ? (
             <h2 className="addy">
-              Hi, {publicKey ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : ""}
+              Hi, {publicKey ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : ""} <p onClick={()=>{setShowModal(!showModal)}}>&#9662;</p>
             </h2>
           ) : (
             <h2 className="pendax">Pendax</h2>

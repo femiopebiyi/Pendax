@@ -87,6 +87,13 @@ font-size: 16px;
 
 .addy{
   color: black;
+  /* border: 1px solid red; */
+  display: flex;
+  align-items: center;
+}
+
+.addy p{
+  cursor: pointer;
 }
 
 .pendax{

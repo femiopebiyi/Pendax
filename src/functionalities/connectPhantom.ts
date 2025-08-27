@@ -34,3 +34,6 @@ export async function connectSolflare() {
     console.error("Solflare connection error:", err);
   }
 }
+
+
+
