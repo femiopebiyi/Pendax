@@ -10,7 +10,7 @@ export function WalletBalance() {
     const { connection } = useConnection();
 
     const [balanceVisibility, setBalanceVisibility] = useState(true);
-    const [usdValue, setUsdValue] = useState<number | null>(null); // USD balance
+    const [usdValue, setUsdValue] = useState<number | null>(null);
 
     function changeBalVisibility() {
         setBalanceVisibility(!balanceVisibility);
@@ -18,22 +18,29 @@ export function WalletBalance() {
 
     useEffect(() => {
         const fetchBalance = async () => {
-            if (publicKey) {
-                try {
-                    const lamports = await connection.getBalance(publicKey);
-                    const sol = lamports / LAMPORTS_PER_SOL;
+            if (!publicKey) return;
 
-                    // fetch SOL price in USD
-                    const res = await fetch(
-                        "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd"
-                    );
-                    const data = await res.json();
-                    const price = data.solana.usd;
+            try {
+                // Get wallet balance in lamports
+                const lamports = await connection.getBalance(publicKey);
 
-                    setUsdValue(parseFloat((sol * price).toFixed(2)));
-                } catch (err) {
-                    console.error("Failed to fetch balance or price:", err);
-                }
+                // Convert lamports to SOL
+                const sol = lamports / LAMPORTS_PER_SOL;
+
+                // Log SOL balance with full precision
+                console.log("Wallet SOL balance:", sol.toFixed(9));
+
+                // Fetch SOL price in USD
+                const res = await fetch(
+                    "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd"
+                );
+                const data = await res.json();
+                const price = data.solana.usd;
+
+                // Calculate USD balance
+                setUsdValue(sol * price);
+            } catch (err) {
+                console.error("Failed to fetch balance or price:", err);
             }
         };
 
@@ -55,7 +62,14 @@ export function WalletBalance() {
                 </p>
                 {connected ? (
                     balanceVisibility ? (
-                        <p>{usdValue !== null ? `$${usdValue}` : "Loading..."}</p>
+                        <p>
+                            {usdValue !== null
+                                ? `$${usdValue.toLocaleString(undefined, {
+                                      minimumFractionDigits: 2,
+                                      maximumFractionDigits: 2,
+                                  })}`
+                                : "Loading..."}
+                        </p>
                     ) : (
                         <p>****</p>
                     )

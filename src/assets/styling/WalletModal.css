@@ -83,7 +83,7 @@
   border: 1px solid #eee;
   border-radius: 12px;
   padding: 10px 14px;
-  background: #fff;
+  background: #F5F7FE;
   cursor: pointer;
   transition: background 0.2s;
 }
@@ -133,3 +133,5 @@
 .no-wallet-btn:hover {
   text-decoration: underline;
 }
+
+

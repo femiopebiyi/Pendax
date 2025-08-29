@@ -12,6 +12,7 @@ import {
 } from "@solana/wallet-adapter-wallets";
 import { clusterApiUrl } from "@solana/web3.js";
 import "@solana/wallet-adapter-react-ui/styles.css";
+import NotifPage from "./pages/NotifPage";
 
 function App() {
   const network = WalletAdapterNetwork.Devnet;
@@ -28,6 +29,7 @@ function App() {
               <Navbar />
               <Routes>
                 <Route path="/" element={<SendPage />} />
+                <Route path="/notif" element = {<NotifPage/>}/>
               </Routes>
               <Footer />
             </Router>

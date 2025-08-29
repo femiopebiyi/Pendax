@@ -18,12 +18,12 @@ export default function Footer() {
 
         <div className="nav-btn">
             <img src={billsIcon} alt="" />
-            <h2>Bills</h2>
+            <h2>Limit</h2>
         </div>
 
         <div className="nav-btn">
             <img src={p2pIcon} alt="" />
-            <h2>P2P</h2>
+            <h2>Bills</h2>
         </div>
 
         {/* <div className="nav-btn">
