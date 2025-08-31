@@ -91,6 +91,16 @@ export function WalletModal({ onClose }: WalletModalProps) {
                 </div>
                 <span className="arrow">→</span>
               </button>
+              <button
+                className="wallet-btn"
+                
+              >
+                <div className="wallet-info">
+                  <img src={backpack} alt="Backpack" className="wallet-icon" />
+                  <span>Jupiter Wallet</span>
+                </div>
+                <span className="arrow">→</span>
+              </button>
             </>
           ) : (
             <button className="wallet-btn disconnect" onClick={disconnect}>

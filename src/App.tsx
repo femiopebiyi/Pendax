@@ -13,6 +13,7 @@ import {
 import { clusterApiUrl } from "@solana/web3.js";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import NotifPage from "./pages/NotifPage";
+import LimitPage from "./pages/LimitPage";
 
 function App() {
   const network = WalletAdapterNetwork.Devnet;
@@ -30,6 +31,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<SendPage />} />
                 <Route path="/notif" element = {<NotifPage/>}/>
+                <Route path="/limit" element = {<LimitPage/>}/>
               </Routes>
               <Footer />
             </Router>

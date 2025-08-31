@@ -1,4 +1,4 @@
-import Notification from "../components/Notification";
+// import Notification from "../components/Notification";
 
 
 
@@ -9,7 +9,7 @@ export default function NotifPage(){
 
     return <div className="notifpage">
         
-
-        <Notification/>
+            no notifications yet
+        {/* <Notification/> */}
     </div>
 }

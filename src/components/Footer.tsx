@@ -1,39 +1,65 @@
 import sendIcon from "../assets/icons/sendIcon.svg"
 import billsIcon from "../assets/icons/wallet.svg"
-import p2pIcon from "../assets/icons/p2p.svg"
 import rewardIcon from "../assets/icons/reward.svg"
+import limitIcon from "../assets/icons/limit.svg"
 
+import sendIconInactive from "../assets/icons/sendInactive.svg"
+import billsIconInactive from "../assets/icons/billsactive.svg"
+import limitIconactive from "../assets/icons/limitactive.svg"
+import rewardIconactive from "../assets/icons/rewardsActive.svg"
 
+import { NavLink } from "react-router-dom"
 
 export default function Footer() {
+    return (
+        <div className="footer">
+            <NavLink 
+                to="/" 
+                className={({ isActive }) => isActive ? "nav-btn active" : "nav-btn"}
+            >
+                {({ isActive }) => (
+                    <>
+                        <img src={isActive ? sendIcon : sendIconInactive} alt="Send" />
+                        <h2 className={isActive ? "active-text" : ""}>Send</h2>
+                    </>
+                )}
+            </NavLink>
 
+            <NavLink 
+                to="/limit" 
+                className={({ isActive }) => isActive ? "nav-btn active" : "nav-btn"}
+            >
+                {({ isActive }) => (
+                    <>
+                        <img src={isActive ? limitIconactive : limitIcon} alt="Limit" />
+                        <h2 className={isActive ? "active-text" : ""}>Limit</h2>
+                    </>
+                )}
+            </NavLink>
 
+            <NavLink 
+                to="/bills" 
+                className={({ isActive }) => isActive ? "nav-btn active" : "nav-btn"}
+            >
+                {({ isActive }) => (
+                    <>
+                        <img src={isActive ? billsIconInactive : billsIcon} alt="Bills" />
+                        <h2 className={isActive ? "active-text" : ""}>Bills</h2>
+                    </>
+                )}
+            </NavLink>
 
-    return <div className="footer">
-        
-        <div className="nav-btn">
-            <img src={sendIcon} alt="" />
-            <h2 className="send-txt">Send</h2>
+            <NavLink 
+                to="/reward" 
+                className={({ isActive }) => isActive ? "nav-btn active" : "nav-btn"}
+            >
+                {({ isActive }) => (
+                    <>
+                        <img src={isActive ? rewardIconactive : rewardIcon} alt="Reward" />
+                        <h2 className={isActive ? "active-text" : ""}>Reward</h2>
+                    </>
+                )}
+            </NavLink>
         </div>
-
-        <div className="nav-btn">
-            <img src={billsIcon} alt="" />
-            <h2>Limit</h2>
-        </div>
-
-        <div className="nav-btn">
-            <img src={p2pIcon} alt="" />
-            <h2>Bills</h2>
-        </div>
-
-        {/* <div className="nav-btn">
-            <img src={forumIcon} alt="" />
-            <h2>Forum</h2>
-        </div> */}
-
-        <div className="nav-btn">
-            <img src={rewardIcon} alt="" />
-            <h2>Reward</h2>
-        </div>
-    </div>
+    )
 }

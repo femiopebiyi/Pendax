@@ -1,12 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import pendaxIcon from "../assets/icons/pendaxIcon.svg";
 import profile from "../assets/icons/Ellipse.png";
+// import brightnessIcon from "../assets/icons/brightnessIcon.svg";
 import messageIcon from "../assets/icons/messageIcon.svg";
 import bellIcon from "../assets/icons/bellIcon.svg";
 import { WalletModal } from "./WalletConnect";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { NavLink } from "react-router-dom";
-import "../assets/styling/Navbar.css";
+import "../assets/styling/Navbar.css"
+
+
 
 export function Navbar() {
   const [showModal, setShowModal] = useState(false);
@@ -18,7 +21,7 @@ export function Navbar() {
     setShowModal(true);
   };
 
-  // close dropdown when clicking outside
+  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -32,20 +35,13 @@ export function Navbar() {
   return (
     <>
       <div className="navbar">
-        {/* Left Side: Logo */}
-        <div className="left">
+        <div className="con">
           <img
-            src={pendaxIcon}
+            src={connected ? profile : pendaxIcon}
             alt="pendaxIcon"
             className="pendaxIcon"
           />
-          <h2 className="pendax">Pendax</h2>
-        </div>
-
-        {/* Middle: Profile / Address */}
-        {connected && (
-          <div className="center">
-            <img src={profile} alt="profile" className="profileIcon" />
+          {connected ? (
             <h2 className="addy" onClick={() => setShowModal(!showModal)}>
               Hi,{" "}
               {publicKey
@@ -55,72 +51,71 @@ export function Navbar() {
                 : ""}{" "}
               <p>&#9662;</p>
             </h2>
-          </div>
-        )}
-
-        {/* Right Side: Small Icons */}
-        <div className="right">
-          {connected ? (
-            <>
-              {/* Message Icon with dropdown */}
-              <div className="dropdown-wrapper" ref={dropdownRef}>
-                <img
-                  src={messageIcon}
-                  alt="message"
-                  className="clickable"
-                  onClick={() => setShowDropdown(!showDropdown)}
-                />
-                {showDropdown && (
-                  <div className="dropdown-menu">
-                    <div
-                      className="dropdown-item"
-                      onClick={() => setShowDropdown(false)}
-                    >
-                      <span className="icon exit">✖</span>
-                      <span>Exit</span>
-                    </div>
-                    <div className="dropdown-item">
-                      <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png"
-                        alt="gmail"
-                        className="icon-img"
-                      />
-                      <span>Gmail</span>
-                    </div>
-                    <div className="dropdown-item">
-                      <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"
-                        alt="telegram"
-                        className="icon-img"
-                      />
-                      <span>Telegram</span>
-                    </div>
-                    <div className="dropdown-item">
-                      <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-                        alt="whatsapp"
-                        className="icon-img"
-                      />
-                      <span>WhatsApp</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Notifications */}
-              <NavLink to="/notif">
-                <img src={bellIcon} alt="notifications" />
-              </NavLink>
-            </>
           ) : (
-            <button className="connect" onClick={handleConnectClick}>
-              Connect Wallet
-            </button>
+            <h2 className="pendax">Pendax</h2>
           )}
         </div>
+
+        {connected ? (
+          <div className="smallIcons">
+            {/* <img src={brightnessIcon} alt="brightness" /> */}
+
+            {/* Message icon + dropdown */}
+            <div className="dropdown-wrapper" ref={dropdownRef}>
+              <img
+                src={messageIcon}
+                alt="message"
+                className="clickable"
+                onClick={() => setShowDropdown(!showDropdown)}
+              />
+              {showDropdown && (
+                <div className="dropdown-menu">
+                  <div
+                    className="dropdown-item"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    <span className="icon exit">✖</span>
+                    <span>Exit</span>
+                  </div>
+                  <div className="dropdown-item">
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png"
+                      alt="gmail"
+                      className="icon-img"
+                    />
+                    <span>Gmail</span>
+                  </div>
+                  <div className="dropdown-item">
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"
+                      alt="telegram"
+                      className="icon-img"
+                    />
+                    <span>Telegram</span>
+                  </div>
+                  <div className="dropdown-item">
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                      alt="whatsapp"
+                      className="icon-img"
+                    />
+                    <span>WhatsApp</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <NavLink to="/notif">
+              <img src={bellIcon} alt="notifications" />
+            </NavLink>
+          </div>
+        ) : (
+          <button className="connect" onClick={handleConnectClick}>
+            Connect Wallet
+          </button>
+        )}
       </div>
 
-      {/* Wallet Modal */}
       {showModal && <WalletModal onClose={() => setShowModal(false)} />}
     </>
   );

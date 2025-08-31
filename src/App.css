@@ -479,12 +479,33 @@ select#icon option[value="NGN"]   { background-image:url(./assets/icons/nairaIco
   text-align: center;
 }
 
-.nav-btn{
+ .footer .nav-btn.active{
+  text-decoration: none;
+  opacity: 100%;
+  color: #661ACF;
+  
+  
+}
+
+.footer img{
+}
+
+.footer .nav-btn.active h2{
+  
+    color: #661ACF;
+  
+}
+
+.footer .nav-btn{
   /* border: 1px solid red; */
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-decoration: none;
+  opacity: 64%;
 }
+
+
 
 .nav-btn img{
   height: 24px;
@@ -596,3 +617,70 @@ font-weight: 700;
   cursor: pointer;
 }
 
+
+.limitpage{
+  /* border: 1px solid red; */
+  margin-top: 5em;
+  
+}
+
+.comingsoon{
+     position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  /* border: 1px solid red; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+}
+
+.comingsoon h2{
+  font-weight: 700;
+  font-size: 36px;
+  font-style: bold;
+  color: #296EFA;
+}
+
+.comingsoon p{
+  font-weight: 500;
+  color: #296EFA;
+  font-size: 14px;
+  text-align: center;
+}
+.notify input{
+  border: none;
+  outline: none;
+  width: 50%;
+}
+
+.notify button{
+  border-radius: 57.26px;
+  padding: 14px 28.18px;
+  background: #661ACF;
+background: linear-gradient(90deg, rgba(102, 26, 207, 1) 0%, rgba(41, 110, 250, 1) 100%);
+border: none;
+outline: none;
+color: white;
+font-family: "Urbanist", "sans-serif";
+font-weight: 700;
+font-style: bold;
+font-size: 16px;
+width: 50%;
+}
+
+.notify{
+  display: flex;
+  justify-content: center;
+  border-radius: 40px;
+  padding: .5em .8em;
+  border: 2px solid #661ACF;
+}
+
+.notify input::placeholder{
+  color: #296EFA;
+  font-family: "Urbanist";
+}
